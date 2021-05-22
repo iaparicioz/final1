@@ -8,11 +8,12 @@ SIZE = 40
 
 
 class Object:
-    def __init__(self, parent_screen, imagen, imagen2):
+    def __init__(self, parent_screen, imagen, imagen2, bad):
         self.parent_screen = parent_screen
         self.image1 = pygame.image.load(f"images/{imagen}").convert()
         self.image2 = pygame.image.load(f"images/{imagen2}").convert()
-        # self.image2 = pygame.image.load(f"images/{bichito}").convert()
+        self.bad = pygame.image.load(f"images/{bad}").convert()
+
         # posicion de inicio del objeto 1
         self.x = SIZE * 4
         self.y = SIZE * 4
@@ -21,10 +22,15 @@ class Object:
         self.x2 = SIZE * 14
         self.y2 = SIZE * 14
 
+        # posicion de malo
+        self.x3 = SIZE * 16
+        self.y3 = SIZE * 16
+
     def draw(self):
-        for i in range(1, 10):
-            self.parent_screen.blit(self.image1, (self.x, self.y))
-            self.parent_screen.blit(self.image2, (self.x2, self.y2))
+        # pinto los objetos en sus posiciones
+        self.parent_screen.blit(self.image1, (self.x, self.y))
+        self.parent_screen.blit(self.image2, (self.x2, self.y2))
+        self.parent_screen.blit(self.bad, (self.x3, self.y3))
         pygame.display.flip()  # updating the screen
 
     def moveObject1(self):
@@ -32,20 +38,33 @@ class Object:
         self.x = random.randint(1, 24) * SIZE
         self.y = random.randint(1, 19) * SIZE
 
+        self.x3 = random.randint(1, 24) * SIZE
+        self.y3 = random.randint(1, 19) * SIZE
+
     def moveObject2(self):
         self.x2 = random.randint(1, 24) * SIZE
         self.y2 = random.randint(1, 19) * SIZE
 
+        self.x3 = random.randint(1, 24) * SIZE
+        self.y3 = random.randint(1, 19) * SIZE
+
+    def moveObject3(self):
+        self.x3 = random.randint(1, 24) * SIZE
+        self.y3 = random.randint(1, 19) * SIZE
+
 
 class Snake:
 
-    def __init__(self, parent_screen, length, color1, color2, color3, face):
+    def __init__(self, parent_screen, length, fondo, face):
         self.length = length
         self.parent_screen = parent_screen
-        self.color1 = color1
+        '''self.color1 = color1
         self.color2 = color2
-        self.color3 = color3
+        self.color3 = color3'''
         self.face = face
+
+        self.fondo1 = pygame.image.load(f"images/{fondo}").convert()
+
 
         # imagenes de la serpiente, cuerpo y cola.
         self.block = pygame.image.load("images/snake40.jpg").convert()
@@ -62,6 +81,11 @@ class Snake:
         self.length += 1
         self.x.append(-1)
         self.y.append(-1)
+
+    '''def reduce_length(self):
+        self.length += 1
+        self.x.pop(-1)
+        self.y.pop(-1) '''
 
     def move_left(self):
         if self.direction != "right":
@@ -80,7 +104,7 @@ class Snake:
             self.direction = 'down'
 
     def draw(self):
-        self.parent_screen.fill((self.color1, self.color2, self.color3))
+        self.parent_screen.blit(self.fondo1, (0, 0))
         self.parent_screen.blit(self.face1, (self.x[0], self.y[0]))
         # pintamos la sepriente
         for i in range(1, self.length - 1):
@@ -119,28 +143,32 @@ class Snake:
 
 
 class Game:
-    def __init__(self, n1, n2, n3, imagen, imagen2, face1):
+    def __init__(self, fondo1, imagen, imagen2, bad, face1):
         # print(n1)
-        self.n1 = n1
+        '''self.n1 = n1
         self.n2 = n2
-        self.n3 = n3
+        self.n3 = n3'''
+        self.fondo1 = fondo1
         self.imagen = imagen
         self.imagen2 = imagen2
+        self.bad = bad
         self.face1 = face1
+        self.contador = 5
 
         pygame.init()
         # tamaño de la apntalla
         self.surface = pygame.display.set_mode((1000, 800))
+        self.surface.blit(pygame.image.load(f"images/{fondo1}").convert(), [0, 0])
 
         # musica fondo
         pygame.mixer.init()
         # self.play_background_music()
 
         pygame.display.set_caption("SERPIENCOVID GAME")
-        self.surface.fill((n1, n2, n3))
-        self.snake = Snake(self.surface, 2, n1, n2, n3, face1)
+        #self.surface.fill((n1, n2, n3))
+        self.snake = Snake(self.surface, 2, fondo1, face1)
         self.snake.draw()
-        self.object = Object(self.surface, imagen, imagen2)
+        self.object = Object(self.surface, imagen, imagen2, bad)
         self.object.draw()
 
     @staticmethod
@@ -160,29 +188,47 @@ class Game:
         pygame.mixer.Sound.play(sound)
 
     def play(self):
+
         self.snake.walk()
         self.object.draw()
         self.display_score()
         pygame.display.flip()
 
-        # snake collision wiht the object
+        # snake collision wiht the object1
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.object.x, self.object.y):
             self.play_sound("sounds/ding")
             # print("Colission")
             self.snake.increase_length()
             self.object.moveObject1()
 
+        # snake collision wiht the object2
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.object.x2, self.object.y2):
             self.play_sound("sounds/ding")
             # print("Colission")
             self.snake.increase_length()
             self.object.moveObject2()
 
+        if self.is_collision(self.snake.x[0], self.snake.y[0], self.object.x3, self.object.y3):
+            self.play_sound("sounds/crash")
+            self.contador = self.contador - 1
+            print(self.contador)
+            # self.snake.reduce_length()
+            self.object.moveObject3()
+
         # snake colLiding with itself
         for i in range(3, self.snake.length):
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 self.play_sound("sounds/crash")
                 raise Exception("Collision occured")
+
+        '''if self.snake.length == 20:
+            self.surface.fill((68,67,69))
+            font = pygame.font.SysFont('arial', 30)
+            line = font.render("¡¡You pass the level!!", True, (255, 255, 255))
+            self.surface.blit(line, (200, 300))
+            line3 = font.render("Press ESC, and choose the next level", True, (255, 255, 255))
+            self.surface.blit(line3, (200, 350))
+            pygame.display.flip()'''
 
     def show_game_over(self):
         # fondo de pantalla para cuando gameover
@@ -198,14 +244,22 @@ class Game:
 
     def reset(self):
         # reset de los objetos y de la sepriente para que empiece de 0
-        self.snake = Snake(self.surface, 2, self.n1, self.n2, self.n3, self.face1)
-        self.object = Object(self.surface, self.imagen, self.imagen2)
+        self.snake = Snake(self.surface, 2, self.fondo1, self.face1)
+        self.object = Object(self.surface, self.imagen, self.imagen2, self.bad)
 
     def display_score(self):
         # puntos por partida, insertar bbdd
         font = pygame.font.SysFont('arial', 30)
-        score = font.render(f"Score: {self.snake.length - 1}", True, (255, 255, 255))
+        score = font.render(f"Score: {self.snake.length - 2}", True, (255, 255, 255))
         self.surface.blit(score, (850, 10))
+        # heart = pygame.image.load("heart30.jpeg").convert()
+        # self.surface.blit(heart, [200, 10])
+        lives = font.render(f"Lives: {self.contador}", True, (255, 255, 255))
+        self.surface.blit(lives, (50, 10))
+        # if self.contador == 5:
+
+        if self.contador == 0:
+            raise Exception("Collision occured")
 
     def run(self, tiempo):
         running = True
