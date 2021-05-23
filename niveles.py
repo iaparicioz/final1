@@ -38,7 +38,7 @@ textoNivel6 = base_font40.render("LEVEL 6", True, (189, 224, 177))
 textoCovid = base_font30.render("¿COVID-19...?", True, 'white')
 textoConf = base_font30.render(" LOCKDOWN", True, 'white')
 textoRest = base_font30.render("RESTRICTIONS", True, 'white')
-textoBye = base_font30.render("BYE STATE OF ALARM", True, 'white')
+textoBye = base_font30.render("BYE EMERGENCY STATE", True, 'white')
 
 back = Rect(50, 700, 200, 50)
 textoBack = base_font75.render("BACK", True, (255, 255, 255))
@@ -64,22 +64,22 @@ def Niveles(user_text):
             if e.type == MOUSEBUTTONDOWN and e.button == 1:
                 if nivel1.collidepoint(mouse.get_pos()):
                     # print("Hola 1")
-                    game = Game("covid1byn.jpg", "murcielago.jpg", "pangolin-2.jpg", "hug1.jpg","snakeojos.jpg")
+                    game = Game("covid1byn.jpg", "murcielago.jpg", "pangolin-2.jpg", "hug1.jpg", "snakeojos.jpg")
                     game.reset()
                     game.run(tiempo=0.40)
                 elif nivel2.collidepoint(mouse.get_pos()):
                     # print("Hola 2")
-                    game = Game("casa2byn.jpg", "papel2.jpg", "gel2.jpg","kiss2.jpg", "snakeojos.jpg")
+                    game = Game("casaDentro2byn.jpg", "papel2.jpg", "gel2.jpg", "kiss2.jpg", "snakeojos.jpg")
                     game.reset()
                     game.run(tiempo=0.30)
                 elif nivel3.collidepoint(mouse.get_pos()):
                     # print("Hola 3")
-                    game = Game("cocina3byn.jpg", "teams3.jpg", "biscuit3.jpg","party3.jpg", "snakeojosmask.jpg")
+                    game = Game("cocina3byn.jpg", "teams3.jpg", "biscuit3.jpg", "party3.jpg", "snakeojosmask.jpg")
                     game.reset()
                     game.run(tiempo=0.25)
                 elif nivel4.collidepoint(mouse.get_pos()):
                     # print("Hola 4")
-                    game = Game("campo4byn.jpg", "bici4.jpg", "PCR4.jpg", "hug4.jpg","snakeojosmask.jpg")
+                    game = Game("campo4byn.jpg", "bici4.jpg", "PCR4.jpg", "hug4.jpg", "snakeojosmask.jpg")
                     game.reset()
                     game.run(tiempo=0.20)
                 elif nivel5.collidepoint(mouse.get_pos()):

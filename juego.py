@@ -5,7 +5,7 @@ import random
 
 # objetos y snake con 40px
 SIZE = 40
-
+pygame.init()
 
 class Object:
     def __init__(self, parent_screen, imagen, imagen2, bad):
@@ -155,7 +155,7 @@ class Game:
         self.face1 = face1
         self.contador = 5
 
-        pygame.init()
+        #pygame.init()
         # tamaño de la apntalla
         self.surface = pygame.display.set_mode((1000, 800))
         self.surface.blit(pygame.image.load(f"images/{fondo1}").convert(), [0, 0])
@@ -211,7 +211,7 @@ class Game:
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.object.x3, self.object.y3):
             self.play_sound("sounds/crash")
             self.contador = self.contador - 1
-            print(self.contador)
+            # print(self.contador)
             # self.snake.reduce_length()
             self.object.moveObject3()
 
