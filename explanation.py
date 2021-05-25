@@ -4,7 +4,7 @@ import sys
 
 import menuScreen
 
-pygame.init()
+#pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption("SERPIENCOVID GAME")
 screen = pygame.display.set_mode([1000, 800])
@@ -19,9 +19,9 @@ base_font100 = pygame.font.Font("Snowy Night.ttf", 100)
 
 back = Rect(50, 700, 200, 50)
 textoBack = base_font75.render("BACK", True, (255, 255, 255))
-texto1 = base_font30.render("textoooo", True, 'white')
+texto1 = base_font30.render("texto traducir Arnau", True, 'white')
 
-fondo = pygame.image.load("images/fondoBueno.jpg").convert()
+fondo = pygame.image.load("images/fondoNegro2.jpg").convert()
 
 
 def Explanation(user_text):

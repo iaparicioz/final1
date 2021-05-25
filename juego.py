@@ -3,16 +3,17 @@ from pygame.locals import *
 import time
 import random
 
-# objetos y snake con 40px
+# objects y snake con 40px
 SIZE = 40
-pygame.init()
+#pygame.init()
+
 
 class Object:
     def __init__(self, parent_screen, imagen, imagen2, bad):
         self.parent_screen = parent_screen
-        self.image1 = pygame.image.load(f"images/{imagen}").convert()
-        self.image2 = pygame.image.load(f"images/{imagen2}").convert()
-        self.bad = pygame.image.load(f"images/{bad}").convert()
+        self.image1 = pygame.image.load(f"images/{imagen}").convert_alpha()
+        self.image2 = pygame.image.load(f"images/{imagen2}").convert_alpha()
+        self.bad = pygame.image.load(f"images/{bad}").convert_alpha()
 
         # posicion de inicio del objeto 1
         self.x = SIZE * 4
@@ -27,14 +28,14 @@ class Object:
         self.y3 = SIZE * 16
 
     def draw(self):
-        # pinto los objetos en sus posiciones
+        # pinto los objects en sus posiciones
         self.parent_screen.blit(self.image1, (self.x, self.y))
         self.parent_screen.blit(self.image2, (self.x2, self.y2))
         self.parent_screen.blit(self.bad, (self.x3, self.y3))
         pygame.display.flip()  # updating the screen
 
     def moveObject1(self):
-        # ubicaciones donde queremos que se ubiquen los objetos en aleatorio
+        # ubicaciones donde queremos que se ubiquen los objects en aleatorio
         self.x = random.randint(1, 24) * SIZE
         self.y = random.randint(1, 19) * SIZE
 
@@ -64,7 +65,6 @@ class Snake:
         self.face = face
 
         self.fondo1 = pygame.image.load(f"images/{fondo}").convert()
-
 
         # imagenes de la serpiente, cuerpo y cola.
         self.block = pygame.image.load("images/snake40.jpg").convert()
@@ -155,7 +155,7 @@ class Game:
         self.face1 = face1
         self.contador = 5
 
-        #pygame.init()
+        # pygame.init()
         # tamaño de la apntalla
         self.surface = pygame.display.set_mode((1000, 800))
         self.surface.blit(pygame.image.load(f"images/{fondo1}").convert(), [0, 0])
@@ -165,7 +165,7 @@ class Game:
         # self.play_background_music()
 
         pygame.display.set_caption("SERPIENCOVID GAME")
-        #self.surface.fill((n1, n2, n3))
+        # self.surface.fill((n1, n2, n3))
         self.snake = Snake(self.surface, 2, fondo1, face1)
         self.snake.draw()
         self.object = Object(self.surface, imagen, imagen2, bad)
@@ -243,7 +243,7 @@ class Game:
         pygame.mixer.music.pause()
 
     def reset(self):
-        # reset de los objetos y de la sepriente para que empiece de 0
+        # reset de los objects y de la sepriente para que empiece de 0
         self.snake = Snake(self.surface, 2, self.fondo1, self.face1)
         self.object = Object(self.surface, self.imagen, self.imagen2, self.bad)
 

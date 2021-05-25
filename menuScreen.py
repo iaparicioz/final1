@@ -8,11 +8,11 @@ import ranking
 import explanation
 
 
-pygame.init()
+#pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption("SERPIENCOVID GAME")
 screen = pygame.display.set_mode([1000, 800])
-fondo = pygame.image.load("images/fondoBueno.jpg").convert()
+fondo = pygame.image.load("images/fondoNegro2.jpg").convert()
 
 base_font15 = pygame.font.Font("Snowy Night.ttf", 15)
 base_font30 = pygame.font.Font("Snowy Night.ttf", 30)
@@ -59,17 +59,17 @@ def Menu(user_text):
         if whatAbout.collidepoint(mouse.get_pos()):
             draw.rect(screen, (134, 179, 122), whatAbout, 0)
         else:
-            draw.rect(screen, (89, 121, 80), whatAbout, 0)
+            draw.rect(screen, (0, 0, 0), whatAbout, 0)
 
-        pygame.draw.rect(screen, (89, 121, 80), startButton, 0)
+        pygame.draw.rect(screen, (0, 0, 0), startButton, 0)
         screen.blit(textoStart, (startButton.x + (startButton.width - textoStart.get_width()) / 2,
                                  startButton.y + (startButton.height - textoStart.get_height()) / 2))
 
-        pygame.draw.rect(screen, (89, 121, 80), rankingButton, 0)
+        pygame.draw.rect(screen, (0, 0, 0), rankingButton, 0)
         screen.blit(textoRanking, (rankingButton.x + (rankingButton.width - textoRanking.get_width()) / 2,
                                    rankingButton.y + (rankingButton.height - textoRanking.get_height()) / 2))
 
-        pygame.draw.rect(screen, (89, 121, 80), creditsButton, 0)
+        pygame.draw.rect(screen, (0, 0, 0), creditsButton, 0)
         screen.blit(textoCredits, (creditsButton.x + (creditsButton.width - textoCredits.get_width()) / 2,
                                    creditsButton.y + (creditsButton.height - textoCredits.get_height()) / 2))
 

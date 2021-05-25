@@ -3,11 +3,11 @@ import sys
 from pygame import *
 import menuScreen
 
-pygame.init()
+#pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption("SERPIENCOVID GAME")
 screen = pygame.display.set_mode([1000, 800])
-fondo = pygame.image.load("images/fondoBueno.jpg").convert()
+fondo = pygame.image.load("images/fondoNegro2.jpg").convert()
 
 base_font15 = pygame.font.Font("Snowy Night.ttf", 15)
 base_font30 = pygame.font.Font("Snowy Night.ttf", 30)
@@ -37,7 +37,7 @@ def Ranking(user_text):
                 if back.collidepoint(mouse.get_pos()):
                     menuScreen.Menu(user_text)
 
-        pygame.draw.rect(screen, (89, 121, 80), back, 1)
+        pygame.draw.rect(screen, (0, 0, 0), back, 1)
         screen.blit(textoBack, (back.x + (back.width - textoBack.get_width()) / 2,
                                 back.y + (back.height - textoBack.get_height()) / 2))
         pygame.display.flip()

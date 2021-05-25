@@ -2,8 +2,10 @@ import menuScreen
 import pygame
 from pygame import *
 import sys
+from connection import *
 
-pygame.init()
+
+#pygame.init()
 
 # inicio de la pantalla
 
@@ -21,12 +23,12 @@ base_font75 = pygame.font.Font("Snowy Night.ttf", 75)
 base_font100 = pygame.font.Font("Snowy Night.ttf", 100)
 
 
-fondo = pygame.image.load("images/fondoBueno.jpg").convert()
+fondo = pygame.image.load("images/fondoNegro2.jpg").convert()
 
 # colores para el cuadro del nickname y tamaño.
 input_rect = pygame.Rect(350, 325, 100, 75)
 color_active = pygame.Color('white')
-color_passive = pygame.Color(218, 221, 213)
+color_passive = pygame.Color(154, 187, 148)
 color = color_passive
 
 # tamaño del cuadro de continuar
@@ -42,6 +44,7 @@ class MainRun:
 
     @staticmethod
     def run():
+        cursor = db.cursor()
         active = False
         user_text = ''
         while True:
@@ -77,7 +80,10 @@ class MainRun:
                             # screen.blit(textFaltaUser, (30, 130))
                             # pygame.time.wait(5000)
                         else:
-                            # print("Nombre de usuario: ", user_text)
+                            print("Nombre de usuario: ", user_text)
+                            cursor.execute = ('INSERT INTO usuario (nameUser) VALUES (%s);', user_text)
+                            db.commit()
+                            cursor.close()
                             menuScreen.Menu(user_text)
 
             # cambio de colores al pulsar el boton de continuar
@@ -93,7 +99,7 @@ class MainRun:
 
             pygame.draw.rect(screen, color, input_rect)
             # color de la letra
-            text_surface = base_font30.render(user_text, True, (89, 121, 80))
+            text_surface = base_font30.render(user_text, True, (0, 0, 0))
             screen.blit(text_surface, (input_rect.x + 20, input_rect.y + 15))
 
             input_rect.w = max(300, text_surface.get_width() + 10)
@@ -109,4 +115,5 @@ class MainRun:
 
 
 if __name__ == '__main__':
+    pygame.init()
     MainRun()
