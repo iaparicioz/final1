@@ -4,8 +4,12 @@ import time
 import random
 
 # objects y snake con 40px
+from connection import *
+
 SIZE = 40
-#pygame.init()
+
+
+# pygame.init()
 
 
 class Object:
@@ -82,11 +86,6 @@ class Snake:
         self.x.append(-1)
         self.y.append(-1)
 
-    '''def reduce_length(self):
-        self.length += 1
-        self.x.pop(-1)
-        self.y.pop(-1) '''
-
     def move_left(self):
         if self.direction != "right":
             self.direction = 'left'
@@ -143,17 +142,19 @@ class Snake:
 
 
 class Game:
-    def __init__(self, fondo1, imagen, imagen2, bad, face1):
+    def __init__(self, user_text, fondo1, imagen, imagen2, bad, face1):
         # print(n1)
         '''self.n1 = n1
         self.n2 = n2
         self.n3 = n3'''
+        self.user_text = user_text
         self.fondo1 = fondo1
         self.imagen = imagen
         self.imagen2 = imagen2
         self.bad = bad
         self.face1 = face1
         self.contador = 5
+        self.cursor = db.cursor()
 
         # pygame.init()
         # tamaño de la apntalla
@@ -163,7 +164,7 @@ class Game:
         # musica fondo
         pygame.mixer.init()
         # self.play_background_music()
-
+        #print("game : ", self.user_text)
         pygame.display.set_caption("SERPIENCOVID GAME")
         # self.surface.fill((n1, n2, n3))
         self.snake = Snake(self.surface, 2, fondo1, face1)
@@ -180,7 +181,7 @@ class Game:
         return False
 
     '''def play_background_music(self):
-        pygame.mixer.music.load("music.mp3")
+        pygame.mixer.music.load("sounds/bg_music_1.mp3")
         pygame.mixer.music.play()'''
 
     def play_sound(self, sound):
@@ -221,25 +222,35 @@ class Game:
                 self.play_sound("sounds/crash")
                 raise Exception("Collision occured")
 
-        '''if self.snake.length == 20:
-            self.surface.fill((68,67,69))
-            font = pygame.font.SysFont('arial', 30)
-            line = font.render("¡¡You pass the level!!", True, (255, 255, 255))
-            self.surface.blit(line, (200, 300))
-            line3 = font.render("Press ESC, and choose the next level", True, (255, 255, 255))
-            self.surface.blit(line3, (200, 350))
-            pygame.display.flip()'''
-
     def show_game_over(self):
         # fondo de pantalla para cuando gameover
-        self.surface.fill((68, 67, 69))
-        font = pygame.font.SysFont('arial', 30)
-        line1 = font.render(f"Game is over! Your score is {self.snake.length}", True, (255, 255, 255))
-        self.surface.blit(line1, (200, 300))
-        line2 = font.render("To play again press Enter. To exit press Escape!", True, (255, 255, 255))
-        self.surface.blit(line2, (200, 350))
-        pygame.display.flip()
+        self.surface.fill((216, 115, 112))
+        base_font100 = pygame.font.Font("SF Hollywood Hills.ttf", 100)
+        base_font50 = pygame.font.Font("SF Hollywood Hills Italic.ttf", 50)
+        line1 = base_font100.render(f"Game is over!", True, (255, 255, 255))
+        line2 = base_font50.render(f"Your score is {self.snake.length}", True, (255, 255, 255))
+        len0 = base_font50.render("OUCH! You can do it better!", True, (255, 255, 255))
+        len10 = base_font50.render("Ohh!! Good game!!", True, (255, 255, 255))
+        len15 = base_font50.render("WOWW! How long have you been practicing? You are a crack!!", True, (255, 255, 255))
+        if self.snake.length < 7:
+            self.surface.blit(len0, (225, 300))
+        elif self.snake.length < 15:
+            self.surface.blit(len10, (225, 300))
+        else:
+            self.surface.blit(len15, (225, 300))
 
+        self.surface.blit(line1, (225, 155))
+        self.surface.blit(line2, (225, 400))
+        line3 = base_font50.render("To play again press Enter.", True, (255, 255, 255))
+        line4= base_font50.render("To exit press Escape!", True, (255, 255, 255))
+        self.surface.blit(line3, (225, 500))
+        self.surface.blit(line4, (225, 550))
+
+        updatePoints = """UPDATE ranking SET points = points + %s WHERE nameUser = %s"""
+        val2 = (self.snake.length, self.user_text)
+        self.cursor.execute(updatePoints, val2)
+        db.commit()
+        pygame.display.flip()
         pygame.mixer.music.pause()
 
     def reset(self):
@@ -249,14 +260,12 @@ class Game:
 
     def display_score(self):
         # puntos por partida, insertar bbdd
-        font = pygame.font.SysFont('arial', 30)
-        score = font.render(f"Score: {self.snake.length - 2}", True, (255, 255, 255))
-        self.surface.blit(score, (850, 10))
-        # heart = pygame.image.load("heart30.jpeg").convert()
-        # self.surface.blit(heart, [200, 10])
-        lives = font.render(f"Lives: {self.contador}", True, (255, 255, 255))
-        self.surface.blit(lives, (50, 10))
-        # if self.contador == 5:
+        base_font40 = pygame.font.Font("SF Hollywood Hills Italic.ttf", 40)
+        score = base_font40.render(f"Score: {self.snake.length - 2}", True, (255, 255, 255))
+        self.surface.blit(score, (830, 10))
+
+        lives = base_font40.render(f"Lives: {self.contador}", True, (255, 255, 255))
+        self.surface.blit(lives, (20, 10))
 
         if self.contador == 0:
             raise Exception("Collision occured")
@@ -271,7 +280,7 @@ class Game:
                     if event.key == K_ESCAPE:
                         running = False
                     if event.key == K_RETURN:
-                        '''pygame.mixer.music.unpause()'''
+                        pygame.mixer.music.unpause()
                         pause = False
 
                     if not pause:

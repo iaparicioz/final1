@@ -15,12 +15,13 @@ screen = pygame.display.set_mode([1000, 800])
 fondo = pygame.image.load("images/fondoNegro2.jpg").convert()
 
 base_font15 = pygame.font.Font("Snowy Night.ttf", 15)
-base_font30 = pygame.font.Font("Snowy Night.ttf", 30)
+base_font30 = pygame.font.Font("SF Hollywood Hills.ttf", 30)
 base_font40 = pygame.font.Font("Snowy Night.ttf", 40)
 base_font50 = pygame.font.Font("Snowy Night.ttf", 50)
 base_font65 = pygame.font.Font("Snowy Night.ttf", 65)
-base_font75 = pygame.font.Font("Snowy Night.ttf", 75)
-base_font100 = pygame.font.Font("Snowy Night.ttf", 100)
+base_font75 = pygame.font.Font("SF Hollywood Hills.ttf", 75)
+base_font100 = pygame.font.Font("SF Hollywood Hills.ttf", 100)
+italic_font30 = pygame.font.Font("SF Hollywood Hills Italic.ttf", 30)
 
 menuTitle = base_font100.render("MAIN MENU", True, 'white')
 textoStart = base_font75.render("START", True, 'white')
@@ -37,7 +38,7 @@ def Menu(user_text):
     print(user_text)
     while True:
         screen.blit(fondo, [0, 0])
-        screen.blit(menuTitle, (275, 130))
+        screen.blit(menuTitle, (300, 150))
 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
@@ -57,7 +58,7 @@ def Menu(user_text):
                     explanation.Explanation(user_text)
 
         if whatAbout.collidepoint(mouse.get_pos()):
-            draw.rect(screen, (134, 179, 122), whatAbout, 0)
+            draw.rect(screen, (140, 176, 134), whatAbout, 0)
         else:
             draw.rect(screen, (0, 0, 0), whatAbout, 0)
 
@@ -73,7 +74,7 @@ def Menu(user_text):
         screen.blit(textoCredits, (creditsButton.x + (creditsButton.width - textoCredits.get_width()) / 2,
                                    creditsButton.y + (creditsButton.height - textoCredits.get_height()) / 2))
 
-        texto2 = base_font30.render("What is about the game?", True, 'white')
+        texto2 = italic_font30.render("What is the game about?", True, 'white')
         screen.blit(texto2, (whatAbout.x + (whatAbout.width - texto2.get_width()) / 2,
                              whatAbout.y + (whatAbout.height - texto2.get_height()) / 2))
 
